@@ -428,6 +428,39 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 .bs-ans-btn:hover { background: color-mix(in srgb, var(--c) 24%, transparent); }
 .bs-ans-btn:active { transform: scale(.93); }
 
+/* ---------- Kniffel ---------- */
+.kn-wrap { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.kn-dice { display: flex; gap: clamp(6px, 2.5vw, 12px); }
+.kn-die { width: clamp(46px, 13vw, 62px); aspect-ratio: 1; border-radius: 12px; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); padding: 13%; background: linear-gradient(160deg, #ffffff, #d7dcf2); box-shadow: 0 4px 10px rgba(0,0,0,.35); border: 2px solid transparent; transition: transform .12s, box-shadow .15s, border-color .15s; }
+.kn-die.blank { background: rgba(255,255,255,.05); box-shadow: inset 0 2px 6px rgba(0,0,0,.45); }
+.kn-die.tap { cursor: pointer; }
+.kn-die.held { border-color: var(--good); box-shadow: 0 0 0 3px color-mix(in srgb, var(--good) 45%, transparent), 0 4px 10px rgba(0,0,0,.35); transform: translateY(-4px); }
+.kn-pip { position: relative; }
+.kn-pip.on::after { content: ""; position: absolute; inset: 22%; border-radius: 50%; background: #15172c; }
+.kn-controls { display: flex; gap: 10px; }
+.kn-roll { min-width: 170px; }
+.kn-roll:disabled { opacity: .45; cursor: not-allowed; }
+.kn-hint { color: var(--muted); font-size: 13px; text-align: center; max-width: 360px; }
+
+.kn-sheet { width: min(96vw, 440px); display: flex; flex-direction: column; gap: 4px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 10px; }
+.kn-row { display: grid; grid-template-columns: 58px 1fr 58px; align-items: center; gap: 6px; }
+.kn-row.head { color: var(--muted); font-weight: 800; font-size: 12px; padding-bottom: 4px; border-bottom: 1px solid var(--border); margin-bottom: 2px; }
+.kn-name { font-size: clamp(12px, 3.4vw, 14px); font-weight: 700; text-align: center; }
+.kn-name.hd { font-weight: 800; }
+.kn-cell { text-align: center; font-weight: 800; border-radius: 8px; padding: 6px 2px; font-size: 14px; min-height: 34px; display: flex; align-items: center; justify-content: center; }
+.kn-cell.hd { font-size: 1.5em; }
+.kn-cell.empty { color: var(--muted2); }
+.kn-cell.filled { color: var(--c); background: color-mix(in srgb, var(--c) 14%, transparent); }
+.kn-cell.pick { cursor: pointer; color: var(--c); background: color-mix(in srgb, var(--c) 10%, transparent); border: 1.5px dashed color-mix(in srgb, var(--c) 55%, transparent); font-family: inherit; }
+.kn-cell.pick:hover { background: color-mix(in srgb, var(--c) 24%, transparent); transform: scale(1.04); }
+.kn-cell.pick.zero { color: var(--muted); border-color: var(--border-2); }
+.kn-row.total { border-top: 1px solid var(--border); margin-top: 2px; padding-top: 5px; }
+.kn-row.total .kn-name { font-weight: 800; color: var(--muted); }
+.kn-cell.sum { color: var(--c); font-weight: 900; background: none; }
+.kn-row.minor .kn-name, .kn-row.minor .kn-cell.sum { font-size: 12px; opacity: .85; }
+.kn-row.grand .kn-name { color: var(--text); font-size: 15px; }
+.kn-row.grand .kn-cell.sum { font-size: 19px; }
+
 /* ---------- Modal ---------- */
 .modal-overlay { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; padding: 20px; background: rgba(5,6,14,.6); backdrop-filter: blur(8px); opacity: 0; transition: opacity .2s; padding-bottom: calc(20px + var(--safe-b)); }
 .modal-overlay.in { opacity: 1; }
