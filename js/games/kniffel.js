@@ -21,8 +21,15 @@
     { id: "chance", name: "Chance" }
   ];
   var ALL = UPPER.concat(LOWER);
-  // Pip-Muster pro Würfelwert (Positionen 0..8 im 3x3-Raster)
-  var PIPS = { 1: [4], 2: [0, 8], 3: [0, 4, 8], 4: [0, 2, 6, 8], 5: [0, 2, 4, 6, 8], 6: [0, 2, 3, 5, 6, 8] };
+  // Pip-Positionen pro Würfelwert als [links%, oben%] (absolut platziert)
+  var DOTPOS = {
+    1: [[50, 50]],
+    2: [[28, 28], [72, 72]],
+    3: [[28, 28], [50, 50], [72, 72]],
+    4: [[28, 28], [72, 28], [28, 72], [72, 72]],
+    5: [[28, 28], [72, 28], [50, 50], [28, 72], [72, 72]],
+    6: [[28, 28], [72, 28], [28, 50], [72, 50], [28, 72], [72, 72]]
+  };
 
   function clone(o) { return JSON.parse(JSON.stringify(o)); }
   function counts(dice) { var c = [0, 0, 0, 0, 0, 0, 0]; dice.forEach(function (d) { if (d >= 1 && d <= 6) c[d]++; }); return c; }
@@ -148,7 +155,7 @@
         var d = E(".kn-die" + (held ? ".held" : "") + (v ? "" : ".blank") + (canHold ? ".tap" : ""), {
           onclick: function () { if (canHold && v) toggleHold(i); }
         });
-        if (v) for (var p = 0; p < 9; p++) d.appendChild(E(".kn-pip" + (PIPS[v].indexOf(p) >= 0 ? ".on" : "")));
+        if (v) DOTPOS[v].forEach(function (pos) { d.appendChild(E(".kn-pip", { style: { left: pos[0] + "%", top: pos[1] + "%" } })); });
         return d;
       }
 

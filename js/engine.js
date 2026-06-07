@@ -179,6 +179,7 @@
       var useOnline = game.online && Store.room.available();
       var state = null;
       var scored = false;
+      var roomMid = null;
       var lastMove = null;
       var unwatch = null;
       var unpresence = null;
@@ -206,7 +207,7 @@
           Store.room.transaction(game.id, function (cur) {
             var c = dec(cur);
             if (c && c.state) return cur;
-            return enc({ state: def.create(), scoredBy: null, ts: serverTs() });
+            return enc({ state: def.create(), scoredBy: null, ts: serverTs(), mid: Engine.uid() });
           });
         } else {
           state = def.create();
@@ -220,8 +221,9 @@
           var data = dec(val);
           if (!data || !data.state) { startState(); return; }
           state = data.state;
-          scored = !!data.scoredBy;       // schon gewertet?
+          roomMid = data.mid || null;
           render();
+          maybeAward();
         });
         unpresence = Store.onPresence(function (p) { presence = p || {}; render(); });
         startState();
@@ -253,42 +255,37 @@
         lastMove = m;
         var after = def.status(next);
 
+        Engine.sfx.move();
         if (useOnline) {
-          var payload = { state: next, ts: serverTs(), scoredBy: null };
-          if (after.over) payload.scoredBy = me;     // der, der den letzten Zug macht, wertet
-          Store.room.set(game.id, enc(payload));
-          if (after.over) award(after);              // nur dieser Client wertet
+          Store.room.set(game.id, enc({ state: next, ts: serverTs(), scoredBy: (after.over ? me : null), mid: roomMid }));
+          // Wertung läuft idempotent im watch-Handler (maybeAward) – robust gegen Sync-Timing.
         } else {
           state = next;
           render();
-          if (after.over) award(after);
+          maybeAward();
         }
-        Engine.sfx.move();
       }
 
-      function award(st) {
+      function maybeAward() {
+        if (!state) return;
+        var st = def.status(state);
+        if (!st.over) { scored = false; return; }   // neues/laufendes Spiel -> Wertung wieder freigeben
         if (scored) return;
         scored = true;
+        if (st.winner) Store.addResult(st.winner, game.id, useOnline ? { token: game.id + ":" + (roomMid || "") } : {});
         setTimeout(function () {
-          if (st.draw) {
-            Engine.sfx.tie();
-          } else if (st.winner) {
-            Store.addResult(st.winner, game.id, {});
-            if (!useOnline || st.winner === me) {
-              Engine.sfx.win();
-              Engine.confetti({ colors: [Engine.players[st.winner].color, Engine.players[st.winner].color2, "#fde047"] });
-            } else {
-              Engine.sfx.lose();
-            }
+          if (st.draw) Engine.sfx.tie();
+          else if (st.winner) {
+            if (!useOnline || st.winner === me) { Engine.sfx.win(); Engine.confetti({ colors: [Engine.players[st.winner].color, Engine.players[st.winner].color2, "#fde047"] }); }
+            else Engine.sfx.lose();
           }
-          render();
         }, 250);
       }
 
       function doReset() {
         scored = false; lastMove = null;
         if (useOnline) {
-          Store.room.set(game.id, enc({ state: def.create(), scoredBy: null, ts: serverTs() }));
+          Store.room.set(game.id, enc({ state: def.create(), scoredBy: null, ts: serverTs(), mid: Engine.uid() }));
         } else {
           state = def.create(); render();
         }

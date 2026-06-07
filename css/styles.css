@@ -431,12 +431,11 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 /* ---------- Kniffel ---------- */
 .kn-wrap { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 14px; }
 .kn-dice { display: flex; gap: clamp(6px, 2.5vw, 12px); }
-.kn-die { width: clamp(46px, 13vw, 62px); aspect-ratio: 1; border-radius: 12px; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); padding: 13%; background: linear-gradient(160deg, #ffffff, #d7dcf2); box-shadow: 0 4px 10px rgba(0,0,0,.35); border: 2px solid transparent; transition: transform .12s, box-shadow .15s, border-color .15s; }
-.kn-die.blank { background: rgba(255,255,255,.05); box-shadow: inset 0 2px 6px rgba(0,0,0,.45); }
+.kn-die { position: relative; width: clamp(48px, 13.5vw, 64px); height: clamp(48px, 13.5vw, 64px); border-radius: 12px; background: linear-gradient(160deg, #ffffff, #d7dcf2); box-shadow: 0 4px 10px rgba(0,0,0,.35); border: 2px solid transparent; transition: transform .12s, box-shadow .15s, border-color .15s; }
+.kn-die.blank { background: rgba(255,255,255,.10); border: 2px dashed rgba(255,255,255,.30); box-shadow: inset 0 2px 6px rgba(0,0,0,.3); }
 .kn-die.tap { cursor: pointer; }
 .kn-die.held { border-color: var(--good); box-shadow: 0 0 0 3px color-mix(in srgb, var(--good) 45%, transparent), 0 4px 10px rgba(0,0,0,.35); transform: translateY(-4px); }
-.kn-pip { position: relative; }
-.kn-pip.on::after { content: ""; position: absolute; inset: 22%; border-radius: 50%; background: #15172c; }
+.kn-pip { position: absolute; width: 19%; height: 19%; border-radius: 50%; background: #15172c; transform: translate(-50%, -50%); }
 .kn-controls { display: flex; gap: 10px; }
 .kn-roll { min-width: 170px; }
 .kn-roll:disabled { opacity: .45; cursor: not-allowed; }
