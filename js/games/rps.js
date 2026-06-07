@@ -40,7 +40,10 @@
         unpres = Store.onPresence(function (p) { presence = p || {}; renderOnline(); });
         unwatch = Store.room.watch("rps", function (val) {
           if (!val) { Store.room.transaction("rps", function (c) { return c || fresh(); }); return; }
-          state = val; tryResolve(); maybeAward(); renderOnline();
+          state = val;
+          if (!state.picks) state.picks = { konsti: null, mia: null };
+          if (!state.scores) state.scores = { konsti: 0, mia: 0 };
+          tryResolve(); maybeAward(); renderOnline();
         });
         Store.room.transaction("rps", function (c) { return c || fresh(); });
         this._cleanup = function () { if (unwatch) unwatch(); if (unpres) unpres(); };

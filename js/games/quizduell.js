@@ -152,7 +152,14 @@
       if (useOnline) {
         var state = null;
         unpres = Store.onPresence(function (p) { presence = p || {}; renderOnline(); });
-        unwatch = Store.room.watch("quizduell", function (val) { state = val; tryResolve(); maybeAward(); renderOnline(); });
+        unwatch = Store.room.watch("quizduell", function (val) {
+          state = val;
+          if (state) {
+            if (!state.picks) state.picks = { konsti: null, mia: null };
+            if (!state.scores) state.scores = { konsti: 0, mia: 0 };
+          }
+          tryResolve(); maybeAward(); renderOnline();
+        });
         this._cleanup = function () { if (unwatch) unwatch(); if (unpres) unpres(); };
 
         function startCat(catId) {

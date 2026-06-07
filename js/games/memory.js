@@ -45,6 +45,9 @@
       var me = ctx.me;
       var useOnline = Store.room.available();
       var state = null, scored = false, resolving = false, unwatch = null, unpres = null, presence = {};
+      // Firebase löscht null/leere Werte -> als JSON-String ablegen (Karten/owner bleiben intakt).
+      function enc(o) { return JSON.stringify(o); }
+      function dec(v) { if (typeof v === "string") { try { return JSON.parse(v); } catch (e) { return null; } } return null; }
 
       var statusEl = E(".game-status");
       var scoreRow = E(".memory-scores");
@@ -57,17 +60,19 @@
       function start() {
         if (useOnline) {
           Store.room.transaction("memory", function (cur) {
-            if (cur && cur.deck) return cur;
-            return newState();
+            var c = dec(cur);
+            if (c && c.deck) return cur;
+            return enc(newState());
           });
         } else { state = newState(); scored = false; render(); }
       }
-      function write(s) { if (useOnline) Store.room.set("memory", s); else { state = s; render(); maybeResolve(); maybeAward(); } }
+      function write(s) { if (useOnline) Store.room.set("memory", enc(s)); else { state = s; render(); maybeResolve(); maybeAward(); } }
 
       if (useOnline) {
         unwatch = Store.room.watch("memory", function (val) {
-          if (!val || !val.deck) { start(); return; }
-          state = val; scored = !!val.scoredBy; render(); maybeResolve(); maybeAward();
+          var data = dec(val);
+          if (!data || !data.deck) { start(); return; }
+          state = data; scored = !!data.scoredBy; render(); maybeResolve(); maybeAward();
         });
         unpres = Store.onPresence(function (p) { presence = p || {}; render(); });
         start();
@@ -129,7 +134,7 @@
 
       function reset() {
         scored = false; resolving = false;
-        if (useOnline) Store.room.set("memory", newState());
+        if (useOnline) Store.room.set("memory", enc(newState()));
         else { state = newState(); render(); }
         Engine.sfx.flip();
       }

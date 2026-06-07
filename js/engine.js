@@ -182,6 +182,11 @@
       var unpresence = null;
       var presence = {};
 
+      // Firebase löscht null/leere Werte -> Spielstand als JSON-String ablegen
+      // (so übersteht ein leeres Brett – lauter null – den Sync unverändert).
+      function enc(o) { return JSON.stringify(o); }
+      function dec(v) { if (typeof v === "string") { try { return JSON.parse(v); } catch (e) { return null; } } return null; }
+
       // Layout: Statuszeile + Brett + Aktionen
       var statusEl = Engine.el(".game-status");
       var boardWrap = Engine.el(".game-board-wrap");
@@ -197,8 +202,9 @@
         if (useOnline) {
           // Nur EIN Client legt den Startzustand an (transaction = race-sicher).
           Store.room.transaction(game.id, function (cur) {
-            if (cur && cur.state) return cur;
-            return { state: def.create(), scoredBy: null, ts: serverTs() };
+            var c = dec(cur);
+            if (c && c.state) return cur;
+            return enc({ state: def.create(), scoredBy: null, ts: serverTs() });
           });
         } else {
           state = def.create();
@@ -209,9 +215,10 @@
 
       if (useOnline) {
         unwatch = Store.room.watch(game.id, function (val) {
-          if (!val || !val.state) { startState(); return; }
-          state = val.state;
-          scored = !!val.scoredBy;       // schon gewertet?
+          var data = dec(val);
+          if (!data || !data.state) { startState(); return; }
+          state = data.state;
+          scored = !!data.scoredBy;       // schon gewertet?
           render();
         });
         unpresence = Store.onPresence(function (p) { presence = p || {}; render(); });
@@ -247,7 +254,7 @@
         if (useOnline) {
           var payload = { state: next, ts: serverTs(), scoredBy: null };
           if (after.over) payload.scoredBy = me;     // der, der den letzten Zug macht, wertet
-          Store.room.set(game.id, payload);
+          Store.room.set(game.id, enc(payload));
           if (after.over) award(after);              // nur dieser Client wertet
         } else {
           state = next;
@@ -279,7 +286,7 @@
       function doReset() {
         scored = false; lastMove = null;
         if (useOnline) {
-          Store.room.set(game.id, { state: def.create(), scoredBy: null, ts: serverTs() });
+          Store.room.set(game.id, enc({ state: def.create(), scoredBy: null, ts: serverTs() }));
         } else {
           state = def.create(); render();
         }
