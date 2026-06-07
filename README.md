@@ -105,11 +105,26 @@ window.KM_CONFIG = {
 Ihr müsst die Seite irgendwo hochladen, damit beide sie über das Internet öffnen
 können. Einfachste Möglichkeiten (kostenlos):
 
-- **Netlify Drop** (am einfachsten): <https://app.netlify.com/drop> – den ganzen
-  Projektordner einfach ins Browserfenster ziehen. Ihr bekommt sofort eine URL.
-- **GitHub Pages**: Ordner in ein Repo legen, Pages aktivieren.
-- **Firebase Hosting**: passt gut, wenn ihr eh schon Firebase nutzt
-  (`npm i -g firebase-tools`, dann `firebase init hosting` und `firebase deploy`).
+**GitHub Pages (empfohlen, ihr habt ja GitHub):**
+Das Projekt ist bereits ein git-Repository mit einem ersten Commit. Es fehlt nur
+noch das Hochladen:
+1. Auf <https://github.com/new> ein **neues, leeres** Repository anlegen
+   (z. B. `spasshaus`) – **ohne** README/.gitignore (haben wir schon). Public ist ok.
+2. Im Projektordner die zwei Zeilen ausführen (URL anpassen):
+   ```bash
+   git remote add origin https://github.com/DEIN-NAME/spasshaus.git
+   git push -u origin main
+   ```
+3. Im Repo: **Settings → Pages → Build and deployment → Source: „Deploy from a
+   branch“ → Branch: `main` / `/ (root)` → Save**.
+4. Nach ~1 Minute ist die Seite live unter
+   `https://DEIN-NAME.github.io/spasshaus/`. Diese URL teilt ihr euch beide. 🎉
+
+> Tipp: Änderungen später einfach mit `git add -A && git commit -m "..." &&
+> git push` hochladen – GitHub Pages aktualisiert sich automatisch.
+
+**Noch einfacher ohne git – Netlify Drop:** <https://app.netlify.com/drop> – den
+ganzen Projektordner ins Browserfenster ziehen, fertig (sofort eine URL).
 
 Danach öffnet **beide** dieselbe URL, wählt eure Figur – und schon teilt ihr
 Punkte und könnt Vier Gewinnt, Tic Tac Toe, Memory & Käsekästchen über die
@@ -117,14 +132,24 @@ Distanz spielen. Bei turnbasierten Spielen seht ihr „Du bist dran" bzw.
 „… ist dran" und ob der/die andere gerade online ist. Zieht jemand offline einen
 Zug, wird er gespeichert und ist da, sobald die andere Person wieder reinschaut. 💕
 
-#### (Optional) Datenbank-Regeln
-Der Testmodus läuft nach ~30 Tagen ab. Damit es weiterläuft, könnt ihr in der
-Realtime Database unter **„Regeln"** Folgendes setzen (einfach, da nur ihr zwei
-den geheimen `roomCode` kennt):
+#### Datenbank-Regeln (wichtig, damit es dauerhaft läuft)
+Der Testmodus läuft nach ~30 Tagen ab. Setzt in der Realtime Database unter
+**„Regeln"** Folgendes – damit ist nur euer Spielbereich `rooms/` beschreibbar:
 
 ```json
-{ "rules": { ".read": true, ".write": true } }
+{
+  "rules": {
+    "rooms": { ".read": true, ".write": true }
+  }
+}
 ```
+
+**Warum kein Login nötig ist:** Es gibt nur euch zwei. Statt Benutzerkonten
+verbindet euch der gemeinsame `roomCode` (in `js/config.js`). Wählt dort einen
+**privaten, nicht zu erratenden** Code (z. B. `kuschelhase-2024-xyz`) – beide
+denselben. Der Firebase-`apiKey` darf ruhig öffentlich im Code stehen, das ist bei
+Web-Apps normal und kein Geheimnis. Da niemand sonst eure URL und euren `roomCode`
+kennt, ist das für ein privates Pärchen-Projekt völlig ausreichend.
 
 > Hinweis: Das erlaubt technisch jedem mit der Datenbank-URL Zugriff. Für ein
 > privates Pärchen-Projekt ist das in der Praxis unkritisch (die URL kennt sonst
