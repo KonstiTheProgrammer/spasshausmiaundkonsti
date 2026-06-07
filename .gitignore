@@ -1,0 +1,7 @@
+# Lokale Tooling-/Editor-Dateien (nicht fürs Hosting nötig)
+.claude/
+
+# Betriebssystem
+.DS_Store
+Thumbs.db
+desktop.ini

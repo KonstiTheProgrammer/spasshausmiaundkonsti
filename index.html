@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5" />
+  <title>Konsti & Mia – Spaßhaus 💕</title>
+  <meta name="description" content="Unser kleines Spaßhaus: Spiele zu zweit mit gemeinsamem Punktestand – für Konsti & Mia." />
+  <meta name="theme-color" content="#0c0d1a" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Spaßhaus" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8F%A0%3C/text%3E%3C/svg%3E" />
+  <link rel="apple-touch-icon" href="assets/icon.svg" />
+
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="bg-grad"></div>
+  <div id="app"></div>
+
+  <!-- Konfiguration zuerst -->
+  <script src="js/config.js"></script>
+
+  <!-- Firebase NUR laden, wenn online eingerichtet ist (sonst kein Hängen offline) -->
+  <script>
+    if (window.KM_ONLINE_CONFIGURED) {
+      document.write('<scr' + 'ipt src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"><\/scr' + 'ipt>');
+      document.write('<scr' + 'ipt src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"><\/scr' + 'ipt>');
+    }
+  </script>
+
+  <!-- Kern -->
+  <script src="js/store.js"></script>
+  <script src="js/engine.js"></script>
+
+  <!-- Spiele -->
+  <script src="js/games/connect4.js"></script>
+  <script src="js/games/tictactoe.js"></script>
+  <script src="js/games/memory.js"></script>
+  <script src="js/games/dotsboxes.js"></script>
+  <script src="js/games/quizduell.js"></script>
+  <script src="js/games/rps.js"></script>
+  <script src="js/games/reaction.js"></script>
+  <script src="js/games/blackstories.js"></script>
+  <script src="js/games/questions.js"></script>
+
+  <!-- App zuletzt -->
+  <script src="js/app.js"></script>
+</body>
+</html>

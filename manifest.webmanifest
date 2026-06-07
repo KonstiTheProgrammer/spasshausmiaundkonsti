@@ -1,0 +1,14 @@
+{
+  "name": "Konsti & Mia – Spaßhaus",
+  "short_name": "Spaßhaus",
+  "description": "Spiele zu zweit mit gemeinsamem Punktestand – für Konsti & Mia.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0c0d1a",
+  "theme_color": "#0c0d1a",
+  "icons": [
+    { "src": "assets/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
