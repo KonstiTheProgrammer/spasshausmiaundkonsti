@@ -99,17 +99,12 @@
   }
 
   function gameCard(g) {
-    var badge = g.localOnly ? E(".g-badge.local", { text: "📍 am Gerät" })
-      : g.online ? E(".g-badge.online", { text: "🌍 lokal + online" })
-        : g.noScore ? E(".g-badge.love", { text: "💞 ohne Punkte" })
-          : E(".g-badge.local", { text: "📍 lokal" });
     return E("button.game-card", { onclick: function () { showGame(g); } }, [
       E(".g-emoji", { text: g.emoji }),
       E(".g-info", {}, [
         E(".g-name", { text: g.name }),
         E(".g-tag", { text: g.tagline || "" })
       ]),
-      badge,
       E(".g-arrow", { text: "→" })
     ]);
   }
@@ -224,16 +219,6 @@
     head.appendChild(E(".game-head-title", {}, [E("span.gh-emoji", { text: g.emoji }), E("span", { text: g.name })]));
     head.appendChild(E("button.help-btn", { onclick: function () { showHelp(g); }, title: "Wie geht das?" }, ["?"]));
     main.appendChild(head);
-
-    if (g.online && !g.localOnly && !Store.isOnline()) {
-      main.appendChild(E(".info-banner", {}, [
-        "📍 Ihr spielt gerade ", E("b", { text: "lokal an einem Gerät" }),
-        ". Für Online-Spiel über die Distanz siehe ⚙️ Einstellungen."
-      ]));
-    }
-    if (g.localOnly) {
-      main.appendChild(E(".info-banner.warm", {}, ["💑 Dieses Spiel spielt ihr ", E("b", { text: "zusammen an einem Gerät" }), "."]));
-    }
 
     var hostEl = E(".game-host#gameHost");
     main.appendChild(hostEl);

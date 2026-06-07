@@ -64,6 +64,7 @@
   var scoresCache = normalizeScores(readLS(LS.scores, null));
   var fb = null;               // firebase app/db Referenzen
   var online = false;          // aktiv verbunden?
+  var serverOffset = 0;        // Versatz zur Firebase-Serverzeit (für synchrone Spiele)
 
   // ---------------------------------------------------------------
   // Firebase initialisieren (nur wenn konfiguriert & SDK geladen)
@@ -97,6 +98,8 @@
 
       // Verbindungsstatus / Anwesenheit
       setupPresence(db);
+      // Serverzeit-Versatz für synchrone Spiele (z. B. Reaktionsduell)
+      try { db.ref(".info/serverTimeOffset").on("value", function (s) { serverOffset = s.val() || 0; }); } catch (e) {}
       console.info("[Store] Online verbunden, Raum:", room);
     } catch (e) {
       console.warn("[Store] Firebase-Init fehlgeschlagen:", e);
@@ -160,6 +163,8 @@
     isOnline: function () { return online; },
     isConfigured: function () { return !!window.KM_ONLINE_CONFIGURED; },
     roomCode: function () { return window.KM_CONFIG ? window.KM_CONFIG.roomCode : ""; },
+    // Synchronisierte "Weltzeit" (Firebase-Serverzeit) für gleichzeitige Spiele.
+    now: function () { return (Date.now ? Date.now() : 0) + serverOffset; },
 
     // Identität
     getIdentity: function () { return readLS(LS.identity, null); },
