@@ -15,8 +15,8 @@
 
   // ---- Spieler-Stammdaten -------------------------------------------
   Engine.players = {
-    konsti: { id: "konsti", name: "Konsti", avatar: "🐻", color: "#38bdf8", color2: "#6366f1" },
-    mia:    { id: "mia",    name: "Mia",    avatar: "🐰", color: "#fb7185", color2: "#f472b6" }
+    konsti: { id: "konsti", name: "Konsti", avatar: "🐰", color: "#38bdf8", color2: "#6366f1" },
+    mia:    { id: "mia",    name: "Mia",    avatar: "🐭", color: "#fb7185", color2: "#f472b6" }
   };
   Engine.other = function (id) { return id === "konsti" ? "mia" : "konsti"; };
   // Eindeutige Match-ID (für idempotente Punktevergabe – kein Doppelpunkt bei Reload)

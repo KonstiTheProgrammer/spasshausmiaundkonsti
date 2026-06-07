@@ -25,7 +25,7 @@ Es gibt **zwei** Wege:
   ```
 - Dann im Browser öffnen: <http://localhost:4321>
 
-Beim ersten Start wählt ihr eure Figur (🐻 Konsti / 🐰 Mia). Das lässt sich
+Beim ersten Start wählt ihr eure Figur (🐰 Konsti / 🐭 Mia). Das lässt sich
 jederzeit oben rechts über **⚙️** wieder ändern.
 
 ---
@@ -162,8 +162,8 @@ kennt, ist das für ein privates Pärchen-Projekt völlig ausreichend.
 
 - **Namen / Farben / Avatare:** in `js/engine.js` ganz oben bei `Engine.players`.
   ```js
-  konsti: { id:"konsti", name:"Konsti", avatar:"🐻", color:"#38bdf8", color2:"#6366f1" },
-  mia:    { id:"mia",    name:"Mia",    avatar:"🐰", color:"#fb7185", color2:"#f472b6" }
+  konsti: { id:"konsti", name:"Konsti", avatar:"🐰", color:"#38bdf8", color2:"#6366f1" },
+  mia:    { id:"mia",    name:"Mia",    avatar:"🐭", color:"#fb7185", color2:"#f472b6" }
   ```
 - **Eigene Pärchen-Fragen:** in `js/games/questions.js` zur Liste `DECK` hinzufügen.
 - **Quiz-Fragen & -Themen:** in `js/games/quizduell.js` bei `CATS`. Jede Frage:
