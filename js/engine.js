@@ -19,6 +19,8 @@
     mia:    { id: "mia",    name: "Mia",    avatar: "🐰", color: "#fb7185", color2: "#f472b6" }
   };
   Engine.other = function (id) { return id === "konsti" ? "mia" : "konsti"; };
+  // Eindeutige Match-ID (für idempotente Punktevergabe – kein Doppelpunkt bei Reload)
+  Engine.uid = function () { return (Date.now ? Date.now() : 0).toString(36) + "-" + Math.floor(Math.random() * 1e9).toString(36); };
 
   // ---- DOM-Helfer ----------------------------------------------------
   // el("div.klasse#id", {attr:..}, [kinder | text])

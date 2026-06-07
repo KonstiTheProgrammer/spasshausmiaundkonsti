@@ -48,7 +48,7 @@
         Store.room.transaction("rps", function (c) { return c || fresh(); });
         this._cleanup = function () { if (unwatch) unwatch(); if (unpres) unpres(); };
 
-        function fresh() { return { round: 1, scores: { konsti: 0, mia: 0 }, picks: { konsti: null, mia: null }, reveal: false, last: null, scoredBy: null }; }
+        function fresh() { return { round: 1, scores: { konsti: 0, mia: 0 }, picks: { konsti: null, mia: null }, reveal: false, last: null, scoredBy: null, mid: Engine.uid() }; }
         function pick(k) {
           if (!state || state.reveal || isOver(state.scores)) return;
           if (state.picks[me]) return;
@@ -81,7 +81,7 @@
           if (winner === me && !scoredLocal) {
             scoredLocal = true;
             Store.room.update("rps", { scoredBy: winner });
-            Store.addResult(winner, "rps", {});
+            Store.addResult(winner, "rps", { token: "rps:" + (state.mid || "") });
           }
           fxOnce(winner);
         }

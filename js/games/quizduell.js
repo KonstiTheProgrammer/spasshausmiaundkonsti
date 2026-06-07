@@ -165,7 +165,7 @@
         function startCat(catId) {
           Store.room.transaction("quizduell", function (cur) {
             if (cur && cur.questions) return cur;
-            return { questions: buildMatch(catId), idx: 0, picks: { konsti: null, mia: null }, scores: { konsti: 0, mia: 0 }, reveal: false, scoredBy: null };
+            return { questions: buildMatch(catId), idx: 0, picks: { konsti: null, mia: null }, scores: { konsti: 0, mia: 0 }, reveal: false, scoredBy: null, mid: Engine.uid() };
           });
         }
         function pick(i) {
@@ -198,7 +198,7 @@
           if (!done()) return;
           var w = winner(state.scores);
           if (state.scoredBy || w === "tie") { fx(w); return; }
-          if (w === me && !scoredLocal) { scoredLocal = true; Store.room.update("quizduell", { scoredBy: w }); Store.addResult(w, "quizduell", {}); }
+          if (w === me && !scoredLocal) { scoredLocal = true; Store.room.update("quizduell", { scoredBy: w }); Store.addResult(w, "quizduell", { token: "quizduell:" + (state.mid || "") }); }
           fx(w);
         }
         function fx(w) {

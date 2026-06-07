@@ -27,7 +27,7 @@
         var state = null, unwatch = null, unpres = null, presence = {};
         var goTimer = null, graceTimer = null, slowTimer = null, scoredLocal = false, fxDone = false;
         function nowS() { return Store.now(); }
-        function fresh() { return { phase: "idle", goAt: null, round: 1, scores: { konsti: 0, mia: 0 }, taps: { konsti: null, mia: null }, early: { konsti: false, mia: false }, resolved: false, roundWinner: null, scoredBy: null }; }
+        function fresh() { return { phase: "idle", goAt: null, round: 1, scores: { konsti: 0, mia: 0 }, taps: { konsti: null, mia: null }, early: { konsti: false, mia: false }, resolved: false, roundWinner: null, scoredBy: null, mid: Engine.uid() }; }
 
         unpres = Store.onPresence(function (p) { presence = p || {}; render(); });
         unwatch = Store.room.watch("reaction", function (val) {
@@ -122,7 +122,7 @@
           if (!state || state.phase !== "over") return;
           var w = state.scores.konsti >= TARGET ? "konsti" : "mia";
           if (state.scoredBy) { fx(w); return; }
-          if (w === me && !scoredLocal) { scoredLocal = true; Store.room.update("reaction", { scoredBy: w }); Store.addResult(w, "reaction", {}); }
+          if (w === me && !scoredLocal) { scoredLocal = true; Store.room.update("reaction", { scoredBy: w }); Store.addResult(w, "reaction", { token: "reaction:" + (state.mid || "") }); }
           fx(w);
         }
         function fx(w) { if (fxDone) return; fxDone = true; setTimeout(function () { if (w === me) { Engine.sfx.win(); Engine.confetti({ colors: [P[w].color, P[w].color2, "#fde047"] }); } else Engine.sfx.lose(); }, 150); }

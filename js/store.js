@@ -36,7 +36,11 @@
     return { points: 0, wins: 0, losses: 0, draws: 0, games: 0, streak: 0, perGame: {} };
   }
   function defaultScores() {
-    return { konsti: emptyPlayer(), mia: emptyPlayer(), updated: 0 };
+    return { konsti: emptyPlayer(), mia: emptyPlayer(), credited: {}, updated: 0 };
+  }
+  // Bereits gewertete Match-Tokens begrenzen (Tokens sind einmalig -> gelegentlich leeren reicht).
+  function pruneCredited(s) {
+    if (s.credited && Object.keys(s.credited).length > 120) s.credited = {};
   }
   // Sorgt dafür, dass ein (evtl. altes/teilweises) Scores-Objekt vollständig ist.
   function normalizeScores(s) {
@@ -54,6 +58,7 @@
       np.perGame = (p.perGame && typeof p.perGame === "object") ? p.perGame : {};
       base[id] = np;
     });
+    base.credited = (s.credited && typeof s.credited === "object") ? s.credited : {};
     base.updated = s.updated || 0;
     return base;
   }
@@ -190,16 +195,27 @@
     onPresence: function (cb) { presenceListeners.push(cb); return function () { remove(presenceListeners, cb); }; },
 
     addResult: function (winnerId, gameId, opts) {
+      opts = opts || {};
+      var token = opts.token; // wenn gesetzt: nur einmal werten (idempotent, auch bei Reload)
       if (online && fb) {
         // Transaktion -> race-sicher bei zwei Geräten
         var ref = fb.db.ref(fb.base + "/scores");
         ref.transaction(function (current) {
           var s = normalizeScores(current);
+          if (token) {
+            if (s.credited[token]) return;        // schon gewertet -> Transaktion abbrechen
+            s.credited[token] = 1; pruneCredited(s);
+          }
           applyResultLocally(s, winnerId, gameId, opts);
           return withTimestamp(s);
         });
         // Listener (on value) aktualisiert scoresCache + UI automatisch.
       } else {
+        if (token) {
+          scoresCache.credited = scoresCache.credited || {};
+          if (scoresCache.credited[token]) return; // schon gewertet
+          scoresCache.credited[token] = 1; pruneCredited(scoresCache);
+        }
         applyResultLocally(scoresCache, winnerId, gameId, opts);
         withTimestamp(scoresCache);
         writeLS(LS.scores, scoresCache);
