@@ -15,16 +15,19 @@
 window.KM_CONFIG = {
   // ---- Firebase (optional, für Online-Spiel über die Distanz) ----
   firebase: {
-    apiKey: "",
-    authDomain: "",
-    databaseURL: "",
-    projectId: "",
-    appId: ""
+    apiKey: "AIzaSyB4ecBrC6jp27wUpjSrnKiy71vrdWv5kPo",
+    authDomain: "spasshaus-40b96.firebaseapp.com",
+    databaseURL: "https://spasshaus-40b96-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "spasshaus-40b96",
+    storageBucket: "spasshaus-40b96.firebasestorage.app",
+    messagingSenderId: "229044858396",
+    appId: "1:229044858396:web:2a8c26b097e9888b7d79d9",
+    measurementId: "G-TXPLQH4N9C"
   },
 
-  // Euer gemeinsamer "Raum". Beide müssen denselben Code haben, um
-  // im selben Spielstand/Punktestand zu landen. Standard reicht völlig.
-  roomCode: "konsti-und-mia"
+  // Euer gemeinsamer "Raum". Beide laden dieselbe Seite -> denselben Code,
+  // und landen so im selben Spielstand/Punktestand. (Privat & nicht offensichtlich.)
+  roomCode: "mk-spasshaus-7q9f3a"
 };
 
 // Online wird automatisch aktiv, sobald oben ein apiKey + databaseURL stehen.
