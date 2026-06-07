@@ -22,7 +22,7 @@
       lock: false,
       turn: Math.random() < 0.5 ? "konsti" : "mia",
       pairs: { konsti: 0, mia: 0 },
-      scoredBy: null
+      scoredBy: null, mid: Engine.uid()
     };
   }
   function statusOf(s) {
@@ -72,7 +72,7 @@
         unwatch = Store.room.watch("memory", function (val) {
           var data = dec(val);
           if (!data || !data.deck) { start(); return; }
-          state = data; scored = !!data.scoredBy; render(); maybeResolve(); maybeAward();
+          state = data; render(); maybeResolve(); maybeAward();
         });
         unpres = Store.onPresence(function (p) { presence = p || {}; render(); });
         start();
@@ -118,10 +118,9 @@
         if (!state || scored) return;
         var st = statusOf(state);
         if (!st.over) return;
-        // Online: nur der Client, der zuletzt aufgelöst hat (scoredBy===me) wertet.
-        if (useOnline && state.scoredBy !== me) { scored = true; finishFx(st); return; }
         scored = true;
-        if (!st.draw && st.winner) Store.addResult(st.winner, "memory", {});
+        // Token -> Punkt wird genau einmal vergeben (egal welcher Client/Reload).
+        if (!st.draw && st.winner) Store.addResult(st.winner, "memory", { token: "memory:" + (state.mid || "") });
         finishFx(st);
       }
       function finishFx(st) {
