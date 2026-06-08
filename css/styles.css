@@ -460,6 +460,22 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 .kn-row.grand .kn-name { color: var(--text); font-size: 15px; }
 .kn-row.grand .kn-cell.sum { font-size: 19px; }
 
+/* ---------- Kino ---------- */
+.kino { width: 100%; display: flex; flex-direction: column; gap: 12px; }
+.kino-bar { display: flex; gap: 8px; width: 100%; }
+.kino-input { flex: 1; min-width: 0; padding: 11px 14px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font-family: inherit; font-size: 14px; }
+.kino-input:focus { outline: none; border-color: var(--border-2); background: var(--surface-2); }
+.kino-load { white-space: nowrap; }
+.kino-stage { width: 100%; border-radius: var(--r); overflow: hidden; background: #000; box-shadow: var(--shadow); }
+.kino-yt { position: relative; width: 100%; aspect-ratio: 16 / 9; }
+.kino-yt iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.kino-video { width: 100%; aspect-ratio: 16 / 9; display: block; background: #000; }
+.kino-placeholder { aspect-ratio: 16 / 9; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; color: var(--muted); font-size: clamp(30px, 9vw, 46px); text-align: center; line-height: 1.2; }
+.kino-placeholder span { font-size: 14px; }
+.kino-status { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.kino-sync { font-size: 12.5px; color: var(--muted); }
+.kino-note { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 16px 18px; color: var(--muted); line-height: 1.55; }
+
 /* ---------- Modal ---------- */
 .modal-overlay { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; padding: 20px; background: rgba(5,6,14,.6); backdrop-filter: blur(8px); opacity: 0; transition: opacity .2s; padding-bottom: calc(20px + var(--safe-b)); }
 .modal-overlay.in { opacity: 1; }
